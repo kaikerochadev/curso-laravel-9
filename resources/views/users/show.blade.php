@@ -1,3 +1,9 @@
+@extends('layouts.app')
+
+@section('title', 'Listagem do usuário: {{ $user->name }}')
+
+@section('content')
+
 <h1>Listagem do usuário {{ $user->name }}</h1>
 
 <ul>
@@ -13,3 +19,5 @@
 
     <a href="{{ route('users.index') }}">Voltar</a>
 </ul>
+
+@endsection
