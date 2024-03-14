@@ -24,4 +24,12 @@ class UserController extends Controller
 
         return view('users.show', ['user' => $user]);
     }
+
+    public function create() {
+        return view('users.create');
+    }
+
+    public function store() {
+        dd('Cadastrando o usuário');
+    }
 }
