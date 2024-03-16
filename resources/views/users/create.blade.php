@@ -20,7 +20,7 @@
     @csrf
     <input type="name" name="name" placeholder="Nome:" value="{{old('name')}}">
     <input type="email" name="email" placeholder="E-mail:" value="{{old('email')}}">
-    <input type="password" name="password" placeholder="Senha:" value="{{old('password')}}">
+    <input type="password" name="password" placeholder="Senha:">
     <button>
         Cadastrar
     </button>
