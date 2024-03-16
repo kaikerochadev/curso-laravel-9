@@ -16,8 +16,6 @@ class UserController extends Controller
 
     public function show($id) {
         // $user = User::where('id', $id)->first();
-        
-        $user = User::find($id);
 
         if (!$user = User::find($id)) {
             return redirect()->route('users.index');
@@ -54,15 +52,21 @@ class UserController extends Controller
             return redirect()->route('users.index');
         }
 
-        return view('users.edit',['user' => $user]);
+        return view('users.edit', compact('user'));
     }
 
-    public function update($id) {
+    public function update(Request $request, $id) {
         if (!$user = User::find($id)) {
             return redirect()->route('users.index');
         }
 
+        $data = $request->only('name', 'email');
+        if ($request->password)
+            $data['password'] = bcrypt($request->password);
+
+        $user->update($data);
+
         return redirect()->route('users.index');
-    
     }
+    
 }
