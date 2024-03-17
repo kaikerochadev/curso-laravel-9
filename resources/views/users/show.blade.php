@@ -18,6 +18,17 @@
     <br>
 
     <a href="{{ route('users.index') }}">Voltar</a>
+
+    <br>
+
+    <form action="{{ route('users.destroy', $user->id) }}" method="post">
+        @csrf
+        @method('DELETE')
+
+        <button type='submit'>
+            Excluir
+        </button>
+    </form>
 </ul>
 
 @endsection
