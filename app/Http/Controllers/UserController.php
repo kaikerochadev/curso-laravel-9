@@ -8,23 +8,23 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function index(Request $request) {
-        $search = $request->search;
+    protected $model;
 
-        $users = User::where(function ($query) use ($search) {
-            if ($search) {
-                $query->where('email', $search);
-                $query->orWhere('name', 'LIKE', "%{$search}%");
-            }
-        })->get();
+    public function __construct(User $user)
+    {
+        $this->model = $user;
+    }
+
+    public function index(Request $request) {
+        $users = $this->model->getUsers(search: $request->search ?? '');
     
         return view('users.index', ['users' => $users]);
     }
 
     public function show($id) {
-        // $user = User::where('id', $id)->first();
+        // $user = $this->model->where('id', $id)->first();
 
-        if (!$user = User::find($id)) {
+        if (!$user = $this->model->find($id)) {
             return redirect()->route('users.index');
         }
 
@@ -36,10 +36,9 @@ class UserController extends Controller
     }
 
     public function store(StoreUpdateUserFormRequest $request) {
-        $data = $request->all();
-        $data['password'] = bcrypt($data['password']);
+        $data = $this->model->storeUsers($request);
 
-        User::create($data);
+        $this->model->create($data);
 
         return redirect()->route('users.index');
 
@@ -55,7 +54,7 @@ class UserController extends Controller
     }
 
     public function edit($id) {
-        if (!$user = User::find($id)) {
+        if (!$user = $this->model->find($id)) {
             return redirect()->route('users.index');
         }
 
@@ -63,13 +62,11 @@ class UserController extends Controller
     }
 
     public function update(StoreUpdateUserFormRequest $request, $id) {
-        if (!$user = User::find($id)) {
+        if (!$user = $this->model->find($id)) {
             return redirect()->route('users.index');
         }
 
-        $data = $request->only('name', 'email');
-        if ($request->password)
-            $data['password'] = bcrypt($request->password);
+        $data = $this->model->updateUsers($request);
 
         $user->update($data);
 
@@ -77,7 +74,7 @@ class UserController extends Controller
     }
 
     public function destroy($id) {
-        if (!$user = User::find($id)) {
+        if (!$user = $this->model->find($id)) {
             return redirect()->route('users.index');
         }
 
