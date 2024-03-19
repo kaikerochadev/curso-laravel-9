@@ -4,7 +4,7 @@
 
 @section('content')
 
-<h1>Listagem do usuário {{ $user->name }}</h1>
+<h1 class="text-2xl font-semibold leading-tigh py-2">Listagem do usuário {{ $user->name }}</h1>
 
 <ul>
     <li>
@@ -21,11 +21,11 @@
 
     <br>
 
-    <form action="{{ route('users.destroy', $user->id) }}" method="post">
+    <form action="{{ route('users.destroy', $user->id) }}" method="post" class="py-12">
         @csrf
         @method('DELETE')
 
-        <button type='submit'>
+        <button type='submit' class="rounded-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4">
             Excluir
         </button>
     </form>
