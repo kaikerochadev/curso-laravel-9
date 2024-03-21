@@ -8,6 +8,14 @@
 
 <ul>
     <li>
+        @if ($user->image) 
+            <img src="{{ url("storage/{$user->image}")}}" alt="{{ $user->name }}" class="object-cover w-20">
+        @else
+
+        @endif
+    </li>
+
+    <li>
         {{ $user->name }}
     </li>
 

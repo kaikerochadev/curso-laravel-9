@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreUpdateUserFormRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -38,6 +39,10 @@ class UserController extends Controller
     public function store(StoreUpdateUserFormRequest $request) {
         $data = $this->model->storeUsers($request);
 
+        if($request->image) {
+            $data['image'] = $request->image->store('users');
+        }
+
         $this->model->create($data);
 
         return redirect()->route('users.index');
@@ -64,6 +69,13 @@ class UserController extends Controller
     public function update(StoreUpdateUserFormRequest $request, $id) {
         if (!$user = $this->model->find($id)) {
             return redirect()->route('users.index');
+        }
+
+        if($request->image) {
+            if ($user->image && Storage::exists($user->image)) {
+                Storage::delete($user->image);
+            }
+            $data['image'] = $request->image->store('users');
         }
 
         $data = $this->model->updateUsers($request);
